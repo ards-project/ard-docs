@@ -1,1 +1,1 @@
---8<-- "[spec/agentfinder.md](https://github.com/agentfinder-project/agentfinder/blob/main/spec/agentfinder.md)"
+--8<-- "https://github.com/agentfinder-project/agentfinder/blob/main/spec/agentfinder.md"

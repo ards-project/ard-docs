@@ -8,15 +8,20 @@
 
 ## How is ARDS different from built-in tool search in AI clients?
 
-Built-in tool search helps a model choose among tools that have already been made available to that client. It is useful, but it operates inside a bounded tool universe controlled by the client.
+They're closely related. At one level, a client's built-in tool search is itself an implementation of agentic resource discovery — scoped to the tools that client already has. It chooses among a known, client-managed set, which works well within that boundary.
 
-ARDS addresses the layer before that. It helps clients and organizations discover which capabilities should be available for a task in the first place. Those capabilities may come from internal systems, vendor services, public catalogs, Skills, MCP servers, APIs, workflows, agents, or other discovery sources.
+ARDS describes the same idea more generally, and decouples discovery from any single client. The capabilities a task might need can come from many places — internal systems, vendor services, public catalogs, Skills, MCP servers, APIs, workflows, or agents — and ARDS lets a client or organization discover which of them should be available in the first place, rather than that universe being fixed by the client implementation.
 
-In some deployments, an ARDS discovery service may produce a policy-filtered toolbox that a client's built-in tool search can use. In others, the client may query the discovery service dynamically at task time. These are complementary patterns.
+The two compose naturally. An ARDS discovery service can produce a policy-filtered toolbox that a client's built-in tool search then ranks over, or a client can query the discovery service dynamically at task time. Because discovery is decoupled, ranking and filtering can also draw on signals a single client usually can't see on its own: policy, permissions, provenance, trust, usage history, success rates, cost, latency, region, compliance requirements, and deprecation state.
 
-The key difference is control. Built-in tool search is typically ranked and governed by the client implementation. ARDS allows ranking and filtering to incorporate enterprise and ecosystem signals: policy, permissions, provenance, trust, usage history, success rates, cost, latency, region, compliance requirements, and deprecation state.
+Decoupling discovery from the client is what makes this useful in practice:
 
-In short: built-in tool search helps select from known tools; ARDS helps find, govern, and rank the capabilities that should be considered.
+- **Enterprise control** — an organization can decide which resources are approved, and which are *preferred* for a given task, and apply policy, permissions, and compliance rules once, centrally, instead of configuring every client by hand.
+- **Federation** — discovery services compose. A company can run its own service that merges internal resources with selected vendor and public sources and expose it as a single endpoint, while still controlling what is included.
+- **Portability** — because the discovery layer is separate, the same resources can be found and used across different AI clients and harnesses, rather than being locked to one client's tool universe.
+- **Independent evolution** — resources can be added, updated, or deprecated without changing the client; a newly published capability becomes discoverable the moment a service indexes it.
+
+In short: built-in tool search selects among known tools; ARDS is the layer that decides which tools should be known — and a client's tool search is one natural way to consume it.
 
 ---
 

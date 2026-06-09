@@ -2,8 +2,8 @@
 site_name: ards.io
 site_url: https://ards.io/
 site_description: A protocol for discovering agentic resources — tools, Skills, MCP servers, APIs, workflows, and agents — for AI clients
-repo_name: ardp-project/docs
-repo_url: https://github.com/ardp-project/docs
+repo_name: ards-project/docs
+repo_url: https://github.com/ards-project/docs
 
 # Configuration
 theme:

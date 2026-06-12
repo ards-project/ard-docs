@@ -23,7 +23,7 @@ current without re-shipping the client.
 A client never invents where to look. Keep a configured list of discovery
 services (registries / Agent Finders) it may query — public, vendor, or your
 organization's internal one — and let the operator decide what is trusted. The
-[connectors](https://github.com/agenticresourcediscovery/connectors) repo's `agent-finders.json`
+[connectors](https://github.com/ards-project/connectors) repo's `agent-finders.json`
 is one example of this pattern.
 
 ## Step 2 — Search

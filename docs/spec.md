@@ -718,13 +718,13 @@ The schema specifications are provided across three distinct formats, serving di
 
 The core data structures for the `ai-catalog.json` manifest, `CatalogEntry` models, zero-trust `trustManifest` security envelope, and Search Registry API payloads are formally specified using **Concise Data Definition Language (CDDL - RFC 8610)**. 
 
-* **Authoritative Schema File**: [`spec/schemas/ard.cddl`](https://github.com/agenticresourcediscovery/ard-spec/blob/main/spec/schemas/ard.cddl)
+* **Authoritative Schema File**: [`spec/schemas/ard.cddl`](https://github.com/ards-project/ard-spec/blob/main/spec/schemas/ard.cddl)
 
 ### D.2 The `ai-catalog.json` Manifest Schema (JSON Schema)
 
 The JSON representation of the capability manifest hosted at `/.well-known/ai-catalog.json` and individual catalog entries are formally defined using the **JSON Schema (Draft 2020-12)** standard. 
 
-* **Authoritative Schema File**: [`spec/schemas/ai-catalog.schema.json`](https://github.com/agenticresourcediscovery/ard-spec/blob/main/spec/schemas/ai-catalog.schema.json)
+* **Authoritative Schema File**: [`spec/schemas/ai-catalog.schema.json`](https://github.com/ards-project/ard-spec/blob/main/spec/schemas/ai-catalog.schema.json)
 * **Key Validation Enforcements**:
   * Pattern matching URN compliance rules for the logical `identifier` format (`^urn:ai:...`).
   * Strict Value-or-Reference exclusion logic (`oneOf` matching either `url` or `data`, preventing duplicate definitions).
@@ -739,7 +739,7 @@ npx ajv-cli validate -s spec/schemas/ai-catalog.schema.json -d path/to/ai-catalo
 
 The HTTP query interfaces (`POST /search` and `GET /agents`) exposed by compliant Agent Registries are formally defined using the **OpenAPI 3.1.0 Specification** in YAML.
 
-* **Authoritative Specification File**: [`spec/schemas/ard.openapi.yaml`](https://github.com/agenticresourcediscovery/ard-spec/blob/main/spec/schemas/ard.openapi.yaml)
+* **Authoritative Specification File**: [`spec/schemas/ard.openapi.yaml`](https://github.com/ards-project/ard-spec/blob/main/spec/schemas/ard.openapi.yaml)
 * **Key Integration Benefits**:
   * Integrates paths, queries, status responses, and paging logic directly.
   * References the JSON Schema `ai-catalog.schema.json` schema files to ensure search and list return types are statically bound to the specification's schema constraints.
@@ -749,7 +749,7 @@ The HTTP query interfaces (`POST /search` and `GET /agents`) exposed by complian
 
 To simplify development and guarantee complete compliance, this repository provides an official, zero-dependency **Conformance Testing CLI Tool** written in Python. It allows publishers to test their manifests and registry developers to validate their REST API servers.
 
-* **Testing Tool Executable**: [`conformance/bin/conformance-test`](https://github.com/agenticresourcediscovery/ard-spec/blob/main/conformance/bin/conformance-test)
+* **Testing Tool Executable**: [`conformance/bin/conformance-test`](https://github.com/ards-project/ard-spec/blob/main/conformance/bin/conformance-test)
 
 #### Features:
 * **Manifest validation mode**: Parses JSON manifests, runs strict JSON Schema checks (using the Python `jsonschema` library if installed), and executes custom semantic checks (e.g., URN formatting rules, Value-or-Reference enforcement, `representativeQueries` sizing).

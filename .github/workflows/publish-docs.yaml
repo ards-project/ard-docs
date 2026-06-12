@@ -49,8 +49,8 @@ jobs:
         run: npx --yes staticrypt@3 site -r -d encrypted --remember 30 --short -s 9f2b7c1ae4d6580b3c2f1e8a7d4c9b06
       # === end password protection ===
 
-      # NOTE: --cname stays ards.io until agenticresourcediscovery.io is provisioned
-      # (DNS + GitHub Pages custom domain). Flip --cname to agenticresourcediscovery.io
+      # NOTE: --cname stays ards.io until agenticresourcediscovery.org is provisioned
+      # (DNS + GitHub Pages custom domain). Flip --cname to agenticresourcediscovery.org
       # at cutover — changing it before the domain is live breaks the deployed site.
       - name: Deploy to GitHub Pages
         run: ghp-import --no-jekyll --push --force --branch gh-pages --cname ards.io -m "Deploy ${{ github.sha }}" encrypted/site

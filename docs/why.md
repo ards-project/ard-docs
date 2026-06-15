@@ -4,6 +4,9 @@
 
 The Agentic Resource Discovery Specification (ARD) is a lightweight, domain-anchored discovery specification. It defines how agentic resources — MCP servers, A2A cards, Skills, and traditional API tools — are cataloged, searched, and dynamically discovered across composable, federated networks of discovery services.
 
+!!! note "ARD isn't run-time-only or open-ended-only"
+    Discovery can run at **build time** (choosing which tools to wire into an agent) or at **run time** (an agent looking one up mid-task), and over a **curated, approved set** of tools or an **open, web-scale** index — the request is the same either way. In practice, **most enterprises will want the restricted case**: discovery scoped to a governed, approved set of tools, not the open web. ARD serves that just as directly as open-web discovery.
+
 ---
 
 ## 1. The scaling problem (prompt bloat)

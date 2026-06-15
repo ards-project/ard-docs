@@ -7,7 +7,7 @@
 - **When — build time *or* run time.** Discovery can happen at build time (a developer or pipeline choosing which tools to wire into an agent) or at run time (an agent looking up a capability mid-task). The request is identical.
 - **What — curated *or* open.** The corpus can be a curated, closed set — an enterprise's approved tools, a single vendor's catalog, an explicit registry — or an open, web-scale index. The discovery service decides what it indexes and serves; ARD is the same protocol over any of them.
 
-For example, a build-time integration against a **curated tool catalog** (such as Microsoft Foundry's Foundry Tools) is exactly as valid an ARD use as open-ended run-time discovery across the public web.
+For example, a build-time integration against a **curated tool catalog** is exactly as valid an ARD use as open-ended run-time discovery across the public web.
 
 The whole point is **one open way to ask "what is available for this task?"** You ask the same way regardless of *when* you ask or *what* you ask against, and the discovery service answers from whatever corpus it curates. ARD is neither run-time-only nor open-ended-only.
 

@@ -83,6 +83,7 @@ nav:
     - Why ARD?: why.md
     - Interoperability: interoperability.md
     - Contributors: contributors.md
+    - Reference Implementations: ref_implementations.md
     - FAQ: faq.md
     - Glossary: glossary.md
   - Guides:

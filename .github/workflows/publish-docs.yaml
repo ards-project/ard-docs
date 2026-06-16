@@ -36,6 +36,16 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements-docs.txt
 
+      # Regenerate the spec page from the canonical ard-spec repo so the two
+      # can't drift. While ard-spec is private the raw fetch 404s and we keep
+      # the committed docs/spec.md; once it is public this auto-syncs on every
+      # deploy. No secret/token needed (both repos will be public).
+      - name: Generate spec page from canonical ard-spec
+        run: |
+          python scripts/sync-spec.py \
+            https://raw.githubusercontent.com/ards-project/ard-spec/main/spec/ard.md \
+          || echo "::warning::canonical ard-spec not reachable; using committed docs/spec.md"
+
       - name: Build site
         run: mkdocs build   # outputs to ./site
 

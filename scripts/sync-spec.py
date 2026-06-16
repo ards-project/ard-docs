@@ -9,12 +9,15 @@ locally against a checkout of ard-spec. Do not hand-edit docs/spec.md.
 
 Usage:
   python scripts/sync-spec.py [SOURCE]
-SOURCE defaults to $ARD_SPEC_SRC, else ../ard-spec/spec/ard.md.
+SOURCE may be a local path or an https:// URL (e.g. the raw GitHub file). It
+defaults to $ARD_SPEC_SRC, else ../ard-spec/spec/ard.md.
 """
 import os
 import posixpath
 import re
 import sys
+import urllib.error
+import urllib.request
 
 REPO = "ards-project/ard-spec"
 BRANCH = "main"
@@ -45,11 +48,16 @@ def main() -> int:
         if len(sys.argv) > 1
         else os.environ.get("ARD_SPEC_SRC", "../ard-spec/spec/ard.md")
     )
-    if not os.path.isfile(src):
-        sys.stderr.write(f"sync-spec: source not found: {src}\n")
+    try:
+        if re.match(r"^https?:", src):
+            with urllib.request.urlopen(src, timeout=30) as r:
+                text = r.read().decode("utf-8")
+        else:
+            with open(src, encoding="utf-8") as f:
+                text = f.read()
+    except (OSError, urllib.error.URLError) as e:
+        sys.stderr.write(f"sync-spec: could not read source {src}: {e}\n")
         return 1
-    with open(src, encoding="utf-8") as f:
-        text = f.read()
     out = LINK_RE.sub(lambda m: "](" + rewrite(m.group("t")) + ")", text)
     dest = os.path.join(os.path.dirname(__file__), "..", "docs", "spec.md")
     with open(dest, "w", encoding="utf-8") as f:

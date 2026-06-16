@@ -38,4 +38,7 @@
   display:block;opacity:1;visibility:visible;transform:none;
   grid-template-rows:minmax(0,1fr);
 }
+/* Sections are always expanded here, so the expand/collapse arrow on nested
+   items (e.g. "Connect a chatbot") is a dead toggle — hide it. */
+.md-nav--primary .md-nav__item--nested>.md-nav__link .md-nav__icon{display:none}
 }

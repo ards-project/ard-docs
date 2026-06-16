@@ -48,6 +48,13 @@ and the MCP connector:
 
 There is **no built-in default** Agent Finder — you choose which discovery
 services to trust. The connector asks which to query, and you can keep a list in
-its `agent-finders.json`. The per-platform examples use GitHub's Agent Finder at
-`agentfinder.github.com`; point at any compliant ARD discovery service instead.
-The connector never queries an endpoint you didn't choose.
+its `agent-finders.json`. The per-platform examples use two real discovery
+services interchangeably:
+
+| Discovery service | Search endpoint |
+| --- | --- |
+| GitHub Agent Finder | `agentfinder.github.com` |
+| Hugging Face Discover | `https://evalstate-hf-discover.hf.space/search` |
+
+Point at either of these — or any compliant ARD discovery service — when a step
+asks for an endpoint. The connector never queries an endpoint you didn't choose.

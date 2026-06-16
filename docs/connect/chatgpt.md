@@ -52,6 +52,7 @@ first and never auto-installs.
 
 ## Endpoint
 
-Examples use GitHub's Agent Finder, `agentfinder.github.com`. Point at any
-compliant ARD discovery service instead — see
+Examples use GitHub's Agent Finder (`agentfinder.github.com`); Hugging Face
+Discover (`https://evalstate-hf-discover.hf.space/search`) works the same way.
+Point at either — or any compliant ARD discovery service — see
 [Endpoints](../connect.md#endpoints).

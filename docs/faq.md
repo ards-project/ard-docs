@@ -13,9 +13,9 @@ The whole point is **one open way to ask "what is available for this task?"** Yo
 
 ---
 
-## How does discovery work without consuming context window tokens?
+## How does discovery reduce context window usage?
 
-Traditional tool selection requires stuffing every available schema into the system prompt. ARD moves this calculation outside the LLM into a dedicated discovery service (`POST /search`). The orchestrator queries the service with natural language, and it returns only the top two or three most relevant schemas to inject into the prompt.
+Traditional tool selection requires stuffing every available schema into the system prompt. ARD moves this calculation outside the LLM into a dedicated discovery service (`POST /search`). The orchestrator queries the service with natural language, and it returns only the top two or three most relevant schemas to inject into the prompt. You still spend tokens on those few — discovery doesn't eliminate context cost, it shrinks it from thousands of candidate tools down to a handful.
 
 ---
 

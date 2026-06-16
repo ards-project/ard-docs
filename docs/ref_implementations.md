@@ -43,3 +43,29 @@ GitHub Copilot can search it directly: add Agent Finder as a remote MCP tool (or
 ### HTTP API
 
 Call search directly at `http://agentfinder.github.com` (`POST /search`).
+
+## Cisco AI Catalog
+
+The [AGNTCY Agent Directory](https://dir.agntcy.org) reference implementation of ARD is deployed by the Cisco [AI Catalog](https://ai-catalog.outshift.io).
+The catalog can be pulled from [`ai-catalog.outshift.io/.well-known/ai-catalog.json`](https://ai-catalog.outshift.io/.well-known/ai-catalog.json).
+It supports secure verification through trust manifests, so clients can validate publisher identity and resource integrity before use.
+
+### 1. Pull the catalog manifest
+
+```bash
+curl -sS https://ai-catalog.outshift.io/.well-known/ai-catalog.json | jq '.specVersion, .host.displayName'
+```
+
+### 2. Discover A2A cards
+
+```bash
+curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fa2a-agent-card%2Bjson' \
+	| jq -r '.results[] | "\(.displayName)\t\(.data.card_data.url // .identifier)"'
+```
+
+### 3. Search by card type and extract trust details
+
+```bash
+curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fmcp-server-card%2Bjson' \
+	| jq -r '.results[] | {displayName, identity: .trustManifest.identity, identityType: .trustManifest.identityType, cardUrl: .data.card_data.url} | @json'
+```

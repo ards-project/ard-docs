@@ -1,4 +1,4 @@
-# How to build a client
+# How to add ARD support to your agent
 
 This guide is for developers building an AI **client** — an orchestrator, agent,
 or harness — that should **discover agentic resources at runtime** instead of

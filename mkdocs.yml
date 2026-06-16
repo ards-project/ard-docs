@@ -94,7 +94,7 @@ nav:
       - Microsoft Copilot: connect/copilot.md
       - Gemini: connect/gemini.md
     - How to publish: how_to_publish.md
-    - How to build a client: how_to_build_a_client.md
+    - How to add ARD support to your agent: how_to_build_a_client.md
   - Specifications:
     - ARD Specification: spec.md
     - AI Catalog Standard: ai_catalog_spec.md

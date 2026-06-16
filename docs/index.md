@@ -6,7 +6,7 @@ hide:
 
 # Agentic Resource Discovery Specification
 
-ARD is an open discovery protocol for [agentic resources](glossary.md#agentic-resource). It allows an AI client to ask: *"What is available for this task?"* and lets a [discovery service](glossary.md#discovery-service) answer with matching resources.
+ARD is an open discovery protocol for agentic resources. It allows an AI client to ask: *"What is available for this task?"* and lets a discovery service answer with matching resources.
 
 ARD sits entirely before invocation. It helps the client find the right resource; the resource is then invoked through its own native mechanism.
 

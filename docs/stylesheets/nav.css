@@ -33,12 +33,20 @@
 /* Always-expand the (shallow) section tree in this range and clear the leaked
    mobile `transform:translateX(100%)` / opacity that otherwise hides inactive
    sections' children while still reserving their vertical space. */
-.md-nav--primary .md-nav__item--nested>.md-nav,
+/* Top-level section trees (About, Guides, Specifications) always stay open. */
 .md-nav--primary .md-nav__item--section>.md-nav{
   display:block;opacity:1;visibility:visible;transform:none;
   grid-template-rows:minmax(0,1fr);
 }
-/* Sections are always expanded here, so the expand/collapse arrow on nested
-   items (e.g. "Connect a chatbot") is a dead toggle — hide it. */
-.md-nav--primary .md-nav__item--nested>.md-nav__link .md-nav__icon{display:none}
+/* Nested sub-sections (e.g. "Connect a chatbot") follow their toggle: expanded
+   only on the active path — the toggle is server-checked for the current page —
+   and collapsed with no reserved vertical space elsewhere. Clear the leaked
+   mobile slide-out transform so the expanded sub-nav isn't pushed off-canvas. */
+.md-nav--primary .md-nav__item--nested:not(.md-nav__item--section)>.md-nav{transform:none}
+.md-nav--primary .md-nav__item--nested:not(.md-nav__item--section)>.md-nav__toggle:checked~.md-nav{
+  display:grid;opacity:1;visibility:visible;grid-template-rows:minmax(0,1fr);
+}
+.md-nav--primary .md-nav__item--nested:not(.md-nav__item--section)>.md-nav__toggle:not(:checked)~.md-nav{
+  grid-template-rows:minmax(0,0fr);opacity:0;visibility:collapse;
+}
 }

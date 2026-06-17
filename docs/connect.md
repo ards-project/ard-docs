@@ -26,6 +26,10 @@ ready-made connectors will:
 4. **Never auto-install.** Only after you pick a result does it show you how to
    add that resource yourself.
 
+**GitHub Copilot is the exception.** Its skill defaults to GitHub's Agent Finder,
+so it skips step 1 and searches GitHub directly. The other four ask which finder
+to use.
+
 ### This is one design among several
 
 That flow is a deliberate choice — the most conservative one — **not** something
@@ -79,10 +83,11 @@ and the MCP connector:
 
 ## Endpoints
 
-There is **no built-in default** Agent Finder — you choose which discovery
-services to trust. The connector asks which to query, and you can keep a list in
-its `agent-finders.json`. The per-platform examples use two real discovery
-services interchangeably:
+Most connectors have **no built-in default** Agent Finder — you choose which
+discovery services to trust, and they ask which to query (keep a list in
+`agent-finders.json`). **GitHub Copilot is the exception:** its skill defaults to
+GitHub's Agent Finder. The per-platform examples use two real discovery services
+interchangeably:
 
 | Discovery service | Search endpoint |
 | --- | --- |

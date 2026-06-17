@@ -33,9 +33,12 @@ Just ask Claude in plain language — the skill triggers on intent:
 >
 > "What skills are available for making PowerPoint decks?"
 
-Claude asks **which Agent Finder** to search (e.g. `https://agentfinder.github.com/api/v1`),
-queries it, and presents a numbered list of matches. Pick one and it shows you
-how to install **that** resource — it never installs anything on its own.
+The first time, Claude shows a **menu of Agent Finders** — GitHub Agent Finder,
+Hugging Face Discover, or your own — and **remembers your pick** (saved in
+`~/.agentfinder/finders.json`). After that it searches your saved finder directly;
+say *switch agent finder* to change. It presents a numbered list of matches; pick
+one and it shows how to install **that** resource — it never installs anything on
+its own.
 
 ## Option B — Remote MCP connector
 
@@ -63,8 +66,8 @@ This gives Claude a native `search` tool across claude.ai, Desktop, and mobile.
 ### How to invoke it
 
 Ask Claude to find a capability and it calls the connector's `search` tool, then
-presents the results. Pair it with the **Skill** (Option A) so it always asks
-which endpoint first and never auto-installs.
+presents the results. Pair it with the **Skill** (Option A) so it offers the
+Agent Finder menu, remembers your choice, and never auto-installs.
 
 ## Endpoint
 

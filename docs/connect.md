@@ -17,8 +17,9 @@ Nothing is installed automatically.
 Once connected, ask your chatbot to find a capability for a task. These
 ready-made connectors will:
 
-1. **Ask which Agent Finder endpoint** to search (you stay in control of where
-   results come from).
+1. **Let you pick an Agent Finder** to search — from a menu of named options
+   (GitHub, Hugging Face, or your own), so you stay in control of where results
+   come from. The Claude skill remembers your choice.
 2. **Query** it.
 3. **Present a ranked list** of matching resources — name, type, description,
    publisher, endpoint, and relevance score (relevance only, *not* a trust or
@@ -83,10 +84,11 @@ and the MCP connector:
 
 ## Endpoints
 
-Most connectors have **no built-in default** Agent Finder — you choose which
-discovery services to trust, and they ask which to query (keep a list in
-`agent-finders.json`). **GitHub Copilot is the exception:** its skill defaults to
-GitHub's Agent Finder. The per-platform examples use two real discovery services
+The connectors ship with two named Agent Finders — **GitHub Agent Finder** and
+**Hugging Face Discover** — and you can add your own in `agent-finders.json`. They
+let you pick which to search (the Claude skill shows a menu and **remembers your
+choice** in `~/.agentfinder/finders.json`). **GitHub Copilot is the exception:** it
+defaults to GitHub's Agent Finder. The examples below use the two shipped services
 interchangeably:
 
 | Discovery service | Search endpoint |

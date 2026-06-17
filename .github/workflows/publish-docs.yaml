@@ -42,19 +42,9 @@ jobs:
       - name: Build site
         run: mkdocs build   # outputs to ./site
 
-      # === Password protection (StatiCrypt) ===
-      # To REMOVE protection later: delete this step and change the deploy
-      # step's path from "encrypted/site" back to "site". Nothing else changes.
-      # Requires repo secret STATICRYPT_PASSWORD (Settings > Secrets > Actions).
-      - name: Encrypt site (StatiCrypt)
-        env:
-          STATICRYPT_PASSWORD: ${{ secrets.STATICRYPT_PASSWORD }}
-        run: npx --yes staticrypt@3 site -r -d encrypted --remember 30 --short -s 9f2b7c1ae4d6580b3c2f1e8a7d4c9b06
-      # === end password protection ===
-
       # Custom domain (live): agenticresourcediscovery.org — apex A-records point to
       # GitHub Pages and the HTTPS cert is approved. ghp-import rewrites the gh-pages
       # CNAME file on every deploy, so this MUST match the Pages custom domain or each
       # deploy will revert it.
       - name: Deploy to GitHub Pages
-        run: ghp-import --no-jekyll --push --force --branch gh-pages --cname agenticresourcediscovery.org -m "Deploy ${{ github.sha }}" encrypted/site
+        run: ghp-import --no-jekyll --push --force --branch gh-pages --cname agenticresourcediscovery.org -m "Deploy ${{ github.sha }}" site

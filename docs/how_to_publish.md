@@ -34,7 +34,7 @@ Create a static `ai-catalog.json` manifest listing your agentic resources. Below
 }
 ```
 
-*   **`identifier`**: Naming must follow the domain-anchored URN standard: `urn:ai:<your-domain>:<agent-name>`.
+*   **`identifier`**: Naming must follow the domain-anchored URN standard: `urn:ai:<your-domain>:<namespace>:<agent-name>`.
 *   **`representativeQueries`**: Provide **2–5 natural language queries** to enable high-fidelity semantic vector search.
 
 ---

@@ -16,8 +16,8 @@ editor, then create the skill from the connectors repo
 ([`skills/chatgpt/`](https://github.com/ards-project/connectors/tree/main/skills/chatgpt)):
 
 - **Name:** `agentfinder`
-- **Instructions:** paste the body of that file (ask which Agent Finder to query,
-  present the ranked results, and never auto-install).
+- **Instructions:** paste the body of that file (show a menu of named Agent
+  Finders, remember the choice, present the ranked results, and never auto-install).
 
 A Skill on its own can't make network calls, so pair it with **Option B** (MCP
 connector) or a custom **Action** whose OpenAPI calls
@@ -30,7 +30,8 @@ explicitly by @-mentioning it:
 
 > @agentfinder find me a tool for converting CSVs to charts
 
-Either way it asks which Agent Finder to search, runs the query via the
+Either way it shows a menu of Agent Finders the first time (and remembers your
+pick), runs the query via the
 connector/Action, and presents the matches for you to pick from.
 
 ## Option B — Remote MCP connector (Developer mode)

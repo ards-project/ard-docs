@@ -12,8 +12,9 @@ new Gem and paste the instructions from the connectors repo
 ([`skills/gemini/`](https://github.com/ards-project/connectors/tree/main/skills/gemini)):
 
 - **Name:** `agentfinder`
-- **Instructions:** copy the body of that file — it tells Gemini to ask which
-  Agent Finder to query, present the ranked results, and never auto-install.
+- **Instructions:** copy the body of that file — it tells Gemini to show a menu of
+  named Agent Finders, remember the choice, present the ranked results, and never
+  auto-install.
 
 Pair the Gem with the **Gemini CLI** MCP setup below (or the Gemini API) so it can
 make the call.
@@ -21,8 +22,9 @@ make the call.
 ### How to invoke it
 
 With the Gem selected (and the CLI/API able to call Agent Finder), ask in plain
-language — *"Find me a tool that summarizes long PDFs."* Gemini asks which Agent
-Finder to search, queries it, and lists the matches.
+language — *"Find me a tool that summarizes long PDFs."* Gemini shows a menu of
+Agent Finders the first time (and remembers your pick), queries it, and lists the
+matches.
 
 ## Option B — Remote MCP connector (Gemini CLI)
 
@@ -46,8 +48,8 @@ can expose `POST /search` as a function.)
 ### How to invoke it
 
 In the Gemini CLI, ask it to find a capability for your task; it calls the
-`search` tool and lists matches. Pair with the Gem (Option A) so it asks first and
-never auto-installs.
+`search` tool and lists matches. Pair with the Gem (Option A) so it offers the
+finder menu, remembers your choice, and never auto-installs.
 
 ## Endpoint
 

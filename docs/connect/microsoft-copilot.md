@@ -11,14 +11,15 @@ instructions from the connectors repo
 ([`skills/copilot/`](https://github.com/ards-project/connectors/tree/main/skills/copilot))
 as the agent's instructions.
 
-They tell Copilot to ask which Agent Finder to query, present the ranked
-results, and never install anything automatically. Pair them with the MCP tool
+They tell Copilot to show a menu of named Agent Finders, remember the choice,
+present the ranked results, and never install anything automatically. Pair them with the MCP tool
 below so the agent can actually make the call.
 
 ### How to invoke it
 
 Ask the agent in plain language — e.g. *"Find me a tool that summarizes long
-PDFs."* It asks which Agent Finder to search, queries it, and lists the matches.
+PDFs."* It shows a menu of Agent Finders the first time (and remembers your pick),
+queries it, and lists the matches.
 
 ## Option B — Remote MCP connector (Copilot Studio)
 
@@ -32,7 +33,7 @@ PDFs."* It asks which Agent Finder to search, queries it, and lists the matches.
 
 With the tool added, ask the agent to find a capability for your task; it calls
 the Agent Finder `search` tool and lists matches. Pair with the instructions
-(Option A) so it asks first and never auto-installs.
+(Option A) so it offers the finder menu, remembers your choice, and never auto-installs.
 
 ## Endpoint
 

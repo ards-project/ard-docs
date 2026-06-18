@@ -27,7 +27,7 @@ We thank the following people for their contributions and feedback, in alphabeti
 - Databricks — Jonathan Keller, Vinod Marur
 - GitHub — Evan Boyle, Jeremy Moseley, Meagan Cojocar, Trent Jones
 - GoDaddy — Scott Courtney
-- Google — Alan Blount, Ines David, John Murray, Krishna Thota, Natasha Balasubramanian, Polong Lin, Rao Surapaneni, Sam Sharaf, Sampath Kumar Maddula, Srinivas Krishnan, Todd Segal
+- Google — Alan Blount, Antonio Gulli, Ines David, John Murray, Krishna Thota, Natasha Balasubramanian, Polong Lin, Rao Surapaneni, Sam Sharaf, Sampath Kumar Maddula, Srinivas Krishnan, Todd Segal
 - Microsoft — Adam Zukor, Chelsea Carter, Dee Templeton, Jennifer Marsman, Kevin Scott, Lindsey Li, Lisa Jaloza, Miesha Baker, Ryan Nadel, Shelby Delano
 - Nvidia — Aysen Ilkhabar
 - Salesforce — Mariano Gonzales, Vijay Pandiarajan

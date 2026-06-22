@@ -74,8 +74,8 @@ curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fm
 
 [Tiza](https://tiza.cc) is a hosted discovery service that continuously crawls and
 live-protocol-probes public agentic resources — MCP servers, A2A agent cards,
-Skills, and APIs — then ranks them for relevance and readiness. It implements ARD
-as both a host and a federatable registry. The catalog can be pulled from
+Skills, and APIs — then ranks them for relevance and readiness. 
+The catalog can be pulled from
 [`tiza.cc/.well-known/ai-catalog.json`](https://tiza.cc/.well-known/ai-catalog.json).
 
 ### HTTP API

@@ -69,3 +69,30 @@ curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fa
 curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fmcp-server-card%2Bjson' \
 	| jq -r '.results[] | {displayName, identity: .trustManifest.identity, identityType: .trustManifest.identityType, cardUrl: .data.card_data.url} | @json'
 ```
+
+## Tiza
+
+[Tiza](https://tiza.cc) is a hosted discovery service that continuously crawls and
+live-protocol-probes public agentic resources — MCP servers, A2A agent cards,
+Skills, and APIs — then ranks them for relevance and readiness. 
+The catalog can be pulled from
+[`tiza.cc/.well-known/ai-catalog.json`](https://tiza.cc/.well-known/ai-catalog.json).
+
+### HTTP API
+
+Search the registry directly at `POST https://tiza.cc/api/ard/v1/search`:
+
+```bash
+curl -sS -X POST https://tiza.cc/api/ard/v1/search \
+  -H 'content-type: application/json' \
+  -d '{"query":{"text":"MCP server for GitHub issues"},"pageSize":5}' \
+  | jq -r '.results[] | "\(.displayName)\t\(.url)"'
+```
+
+Results are standard ARD `CatalogEntry` objects with `urn:air:` identifiers and
+the standard `application/{mcp-server-card,a2a-agent-card,ai-registry}+json` types.
+
+### MCP and A2A
+
+Tiza is also reachable as a hosted, no-auth MCP server at `https://tiza.cc/mcp`
+and as an A2A agent at `https://tiza.cc/.well-known/agent-card.json`.

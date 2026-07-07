@@ -69,3 +69,40 @@ curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fa
 curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fmcp-server-card%2Bjson' \
 	| jq -r '.results[] | {displayName, identity: .trustManifest.identity, identityType: .trustManifest.identityType, cardUrl: .data.card_data.url} | @json'
 ```
+
+## Ora Directory
+
+The [Ora Directory](https://ora.directory) is an ARD discovery service over products and services that agents use on behalf of users, run by [Ora](https://ora.ai). Ora scans each product for agent-readiness — static checks against its docs, llms.txt, registries, and public APIs, plus live agent runs that attempt to use it end to end — and serves the results over the ARD protocol, alongside the MCP servers, Skills, and OpenAPI specs detected on each product, plus payable x402/MPP HTTP endpoints with per-call pricing, indexed from the public Bazaar registry. Every product entry carries its agent-readiness scorecard as a signed trust attestation, so a client can weigh not only whether a resource matches the task, but whether it has been observed to work for agents.
+
+Ora's publisher manifest at [`ora.ai/.well-known/ai-catalog.json`](https://ora.ai/.well-known/ai-catalog.json) describes Ora's own resources and advertises the registry: its `application/ai-registry+json` entry points at `https://ora.ai/api/ard`, which serves a self-describing descriptor listing the endpoints. The index itself is queried through those endpoints.
+
+### Search and browse
+
+The registry implements the full protocol surface — `POST /search`, `POST /explore`, and `GET /agents` with the spec's `filter` expressions and `orderBy` — and returns `referrals` to peer registries.
+
+```bash
+# Find products for a task
+curl -sS -X POST https://ora.ai/api/ard/search \
+  -H 'content-type: application/json' \
+  -d '{"query":{"text":"send transactional email"},"pageSize":5}' \
+  | jq -r '.results[] | "\(.displayName)\t\(.url)"'
+
+# Browse just the MCP servers in the index
+curl -sS -G https://ora.ai/api/ard/agents \
+  --data-urlencode "filter=type = 'application/mcp-server-card+json'" \
+  --data-urlencode "pageSize=5" \
+  | jq -r '.items[].displayName'
+```
+
+### Verify a scorecard
+
+Each result's `trustManifest.attestations[]` references the product's agent-readiness scorecard, signed as a detached Ed25519 JWS and verifiable against the JWKS at [`ora.ai/.well-known/jwks.json`](https://ora.ai/.well-known/jwks.json):
+
+```bash
+curl -sS https://ora.ai/api/ard/attestation/resend.com \
+  | jq '{subject, score, grade, issuer}'
+```
+
+### MCP
+
+Ora is also reachable as an MCP server at `https://ora.ai/api/mcp` (streamable HTTP); its `discover_products`, `get_score`, and `search_capabilities` tools query the same index.

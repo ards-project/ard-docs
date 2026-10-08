@@ -44,7 +44,7 @@ Anyone can contribute. Contribution is open to all, through issues and pull requ
 
 | Company | Representative |
 | :--- | :--- |
-| Google | Todd Segal |
+| Google | Junjie Bu |
 | Hugging Face | Shaun Smith |
 | Microsoft | Dhruv Chand |
 | Amazon | Jeffrey Damick |

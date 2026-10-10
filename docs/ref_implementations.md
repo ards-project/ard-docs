@@ -185,3 +185,39 @@ curl -sS -X GET "https://your-registry.example.com/api/ard/agents?orderBy=identi
 ```
 
 Results are ARD `catalogEntry`s plus a `score` (integer 0–100) and `source`. Errors use the ARD `{errorCode, message}` envelope. Federation ingests other registries' `ai-catalog.json` catalogs into a unified local index, selectable per request via the `federation` parameter (`none` / `auto` / `referrals`).
+
+## Observal
+
+[Observal](https://github.com/Observal/Observal) is an open-source (Apache-2.0), self-hostable registry and observability platform for internal AI components. It is the system of record for an organization's Agents, MCP servers, Skills, hooks, prompts, and sandboxes, and it ships a CLI and a bundled skill that reach ten coding harnesses (Claude Code, Codex, Copilot, Cursor, Pi, Kiro, OpenCode, Antigravity, Goose, and more). Observal implements both the Publisher and Registry roles of ARD v0.91 as a projection over its native registry: the existing listings stay authoritative for install, review, and ownership, and ARD exposes them for discovery. See [`docs/adr/0001-agentic-resource-discovery.md`](https://github.com/Observal/Observal/blob/main/docs/adr/0001-agentic-resource-discovery.md) for the full design.
+
+### Publisher: pull the catalog manifest
+
+The Publisher role renders a conformant `/.well-known/ard.json` (also served at the predecessor `/.well-known/ai-catalog.json` path) listing public, approved entries. Each entry carries a permanent, domain-anchored URN (`urn:air:<deployment-domain>:<kind>:<uuid>`), the IANA media type for its kind, and an `https` `trustManifest` bound to the publisher domain. The human-readable `namespace/slug@version` is preserved as `obs:nativeRef` so a client can pivot straight to Observal's install commands. When the registry is private, the manifest carries only the registry's own `application/ai-registry+json` entry, which advertises the operational base at `https://<deployment>/api/v1/ard`.
+
+```bash
+# Against a self-hosted instance
+curl -sS https://your-registry.example.com/.well-known/ard.json \
+  | jq '.entries | length'
+```
+
+### Registry: search & browse
+
+The Registry role exposes ARD's contract under `/api/v1/ard`: `POST /search` (mandatory) and `GET /agents` (deterministic browse), with `POST /explore` reserved for facets. Access is scoped to the registry's existing visibility rules — anonymous callers see only public, approved entries, and only when the deployment enables its public registry; signed-in callers see exactly what install would grant them, including their own pending items.
+
+```bash
+# Semantic search across Agents and all five component types
+curl -sS -X POST https://your-registry.example.com/api/v1/ard/search \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "content-type: application/json" \
+  -d '{"query":{"text":"review a pull request"},"pageSize":5}' \
+  | jq -r '.results[] | "\(.displayName)\t\(.score)"'
+
+# Browse just the MCP servers in the index
+curl -sS -G "https://your-registry.example.com/api/v1/ard/agents" \
+  -H "Authorization: Bearer $TOKEN" \
+  --data-urlencode "filter=type = 'application/mcp-server-card+json'" \
+  --data-urlencode "pageSize=5" \
+  | jq -r '.items[].displayName'
+```
+
+`score` is semantic relevance only (0–100). Governance signals Observal already tracks — approval state, trust, availability, and supported harnesses — are returned as separate named fields (`obs:approval`, `obs:trust`, `obs:availability`, `obs:supportedHarnesses`) rather than blended into the score. Federation is bounded by an administrator allowlist and selectable per request (`none` / `auto` / `referrals`), so internal search text never leaves the deployment unless an upstream is explicitly allowed. Conformance is tested in CI against this project's [conformance suite](https://github.com/ards-project/ard-spec/tree/main/conformance) pinned at the implemented spec commit.

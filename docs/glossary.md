@@ -12,7 +12,7 @@ A *product*: one discovery service built on ARD — [github.com/agentfinder](htt
 
 ### AI Catalog
 
-A separate manifest standard that predates ARD and shares much of its vocabulary. ARD defines its own [ARD entry](#ard-entry) and its own manifest at `ard.json`; the two are independent specifications.
+A separate manifest standard developed by overlapping communities that shares much of ARD's vocabulary. ARD defines its own [ARD entry](#ard-entry) and its own manifest at `ard.json`; the two are independent specifications, and each one's conformance is self-contained — a change to what a catalog entry requires does not change what an ARD entry requires, and the reverse. They remain compatible: an ARD entry carries every member a catalog entry requires. See [How does ARD relate to AI Catalog?](interoperability.md#how-does-ard-relate-to-ai-catalog).
 
 ### AI client
 

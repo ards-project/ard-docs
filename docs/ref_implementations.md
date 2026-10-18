@@ -270,3 +270,32 @@ git clone https://github.com/ards-project/ard-spec
 pip install jsonschema
 ard-spec/conformance/bin/conformance-test manifest https://api.live.nevermined.app/.well-known/ard.json
 ```
+
+## ASM reference metadata publisher
+
+[ASM](https://github.com/YE-YI7/asm-spec) publishes tool reference metadata through the ARD Publisher interface at [`asm-spec.onrender.com/.well-known/ard.json`](https://asm-spec.onrender.com/.well-known/ard.json). Its 30 entries use `application/asm+json`, link to full ASM manifests, and expose setup, access, risk and source-freshness fields through a JSON-LD `asm` namespace. The landing pages advertise `<link rel="ard">`; the predecessor `/.well-known/ai-catalog.json` remains available.
+
+### Read the metadata and its source dates
+
+```bash
+curl -fsS https://asm-spec.onrender.com/.well-known/ard.json \
+  | jq -r '.entries[]
+      | [.displayName, .["asm:sourceFreshness"], .["asm:lastVerifiedAt"], .url]
+      | @tsv'
+```
+
+This deployment is a **demonstration dataset**: all 30 source snapshots are currently marked `expired`, with source verification dates of June 8–9, 2026. Publication does not renew those dates. Its price and capability fields are historical examples, not current provider guarantees. See the [data-quality policy](https://github.com/YE-YI7/asm-spec/blob/main/docs/data-quality/README.md).
+
+### Check publisher conformance
+
+Checked on **2026-10-18 UTC** by [YE-YI7](https://github.com/YE-YI7), the publisher maintainer (self-reported), using the upstream CLI and schema at [`ard-spec@49eb4df`](https://github.com/ards-project/ard-spec/tree/49eb4df6f3841ccecc5c31d5175117337b568bdf):
+
+```bash
+git clone https://github.com/ards-project/ard-spec
+git -C ard-spec checkout 49eb4df6f3841ccecc5c31d5175117337b568bdf
+python -m pip install jsonschema
+python ard-spec/conformance/bin/conformance-test publisher https://asm-spec.onrender.com
+python ard-spec/conformance/bin/conformance-test manifest https://asm-spec.onrender.com/.well-known/ard.json
+```
+
+Both checks returned **PASS: 0 errors, 0 warnings, 30 informational messages** for the valid extension media type. The checks used a standard HTTPS proxy in the maintainer's environment, with no custom request headers. These are live Publisher/manifest checks; ASM does not claim ARD Registry search/explore conformance or verified execution of the listed tools.

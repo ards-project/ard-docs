@@ -2,8 +2,20 @@
 
 ARD is designed as a **superset** of existing agent and tool discovery approaches. It is not a replacement for other registries; rather, it acts as a federated overlay that unites them.
 
-*   **Universal envelope**: Anything can get an AI Catalog "card" — an MCP server, a Skill, an ACP agent, an A2A agent, a traditional REST API, or whatever comes next.
-*   **Federated indexing**: Once a card is published, it can be indexed by any ARD discovery service. You don't have to choose between registries; a discovery service can consume all of them, or you can curate your own subset.
+*   **Universal envelope**: Anything can get an ARD entry — an MCP server, a Skill, an ACP agent, an A2A agent, a traditional REST API, or whatever comes next. Entries are identified by IANA media type, so a new kind of artifact needs a new type rather than a revision of this specification.
+*   **Federated indexing**: Once an entry is published, it can be indexed by any ARD discovery service. You don't have to choose between registries; a discovery service can consume all of them, or you can curate your own subset.
+
+---
+
+## How does ARD relate to AI Catalog?
+
+ARD defines its own entry and its own manifest at `/.well-known/ard.json`. It shares vocabulary with the **[AI Catalog](https://ai-catalog.io/)** standard — the same URN form, the same IANA media types, the same trust manifest shape — because the two were developed by overlapping communities.
+
+The relationship is **compatibility, not dependency**. As of AI Catalog v0.9-RC, an ARD entry carries every member a catalog entry requires — `identifier`, `type`, and `url` or `data` — so a single document can satisfy both formats' core requirements. Compatibility with later AI Catalog versions is evaluated by the ARD maintainers as those versions are released. ARD additionally expects [representative queries](glossary.md#representative-queries), the signal a search service ranks on, which the catalog format does not define. A catalog entry that omits them remains perfectly valid — it simply will not surface in search.
+
+Each specification's conformance is self-contained. A change to what a catalog entry requires does not change what an ARD entry requires, and the reverse; neither is normative for the other. Both may add terms the other does not recognize, and a consumer processes the terms it knows and preserves the rest. An ARD discovery service may also ingest an AI Catalog document directly; when a publisher serves both `ard.json` and `ai-catalog.json` with entries that share an `identifier`, the `ard.json` entry takes precedence for ARD discovery.
+
+In practice this means a single document can serve both ecosystems today without translating between schemas.
 
 ---
 

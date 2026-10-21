@@ -270,3 +270,99 @@ git clone https://github.com/ards-project/ard-spec
 pip install jsonschema
 ard-spec/conformance/bin/conformance-test manifest https://api.live.nevermined.app/.well-known/ard.json
 ```
+
+## NANDA Index
+
+[NANDA Index](https://nandaindex.org) is an open-source, Apache-2.0 discovery
+index from [Project NANDA](https://github.com/projnanda/nanda-index-v2). It stores
+an entry per organization, linking a domain-anchored `urn:air:` identifier to a
+catalog, registry, or resource card. Agent runtimes remain with their providers.
+
+The registry interface is available at
+[`https://api.nandaindex.org/api/ard`](https://api.nandaindex.org/api/ard).
+Search ranks organizations, queries their NANDA catalogs for matching resources,
+and combines those results with directly registered resource cards. Matching
+ARD registries are returned as referrals for the client to query.
+
+The examples and compatibility notes below describe
+[source revision `dadea665`](https://github.com/projnanda/nanda-index-v2/tree/dadea66595825f5f21aa5d34be5209203a8340f6)
+and public API checks on October 20, 2026. The implementation supports part of
+the [ARD interface](spec.md); the compatibility notes identify the current limits.
+
+### Read the registry descriptor
+
+The descriptor lists the search, explore, and browse endpoints. The public
+discovery endpoints accept requests without authentication.
+
+```bash
+curl -fsS https://api.nandaindex.org/api/ard \
+  | jq '{identifier, endpoints, capabilities}'
+```
+
+### Search for resources
+
+```bash
+curl -fsS -X POST https://api.nandaindex.org/api/ard/search \
+  -H 'content-type: application/json' \
+  -d '{"query":{"text":"restaurant booking"},"pageSize":5}' \
+  | jq '{results: [.results[] | {identifier, displayName, type, url, score}], referrals, pageToken}'
+```
+
+Each result includes an identifier, display name, artifact media type, artifact
+URL, and relevance score. Results also include `provenance` fields identifying
+the organization and registry used for discovery. Clients fetch the artifact
+at `url` to learn how to connect to the resource.
+
+### Browse and count organization entries
+
+Browse returns organization entries, while search can return individual resources
+from those organizations' catalogs. The browse filter accepts one `type` or
+`tags` term, as shown below.
+
+```bash
+curl -fsS -G https://api.nandaindex.org/api/ard/agents \
+  --data-urlencode 'filter=type:"application/a2a-agent-card+json"' \
+  --data-urlencode 'pageSize=5' \
+  | jq '{items: [.items[] | {identifier, displayName, type, url}], pageToken}'
+```
+
+For the next browse page, repeat the same filter and pass the returned
+`pageToken`. A null token marks the end of the listing.
+
+Explore counts organization entries by type or tag. The response includes
+`scope: "organizations"`; the counts do not describe every resource inside
+the organizations' catalogs.
+
+```bash
+curl -fsS -X POST https://api.nandaindex.org/api/ard/explore \
+  -H 'content-type: application/json' \
+  -d '{"resultType":{"facets":[{"field":"type"},{"field":"tags"}]}}' \
+  | jq '{scope, facets}'
+```
+
+### Current compatibility
+
+Clients should account for the following behavior when using NANDA Index with
+[ARD v0.91](https://github.com/ards-project/ard-spec/blob/49eb4df6f3841ccecc5c31d5175117337b568bdf/spec/ard.md).
+
+| Area | Current behavior |
+|------|------------------|
+| Discovery and version | Configure the `/api/ard` base URL directly. `/.well-known/ard.json` returned HTTP 404 on both `nandaindex.org` and `api.nandaindex.org` during the checks above. The descriptor reports `specVersion: "1.0"`; that value is implementation metadata, not a claim of ARD v0.91 conformance. |
+| Search scores | Local results use scores from 0 to 1. ARD describes a 0 to 100 scale. Scores express relevance and do not establish trust. |
+| Search filters and paging | `query.filter.type` accepts an array of media types and filters local results after ranking and truncation. Other filter keys and search `pageToken` are ignored, and the response token is always null. `pageSize` defaults to 30 and accepts 1 to 100, but filtering can reduce the result count. |
+| Referrals | Referral objects use `searchUrl` and omit `type`. ARD's referral shape uses `url` for the complete search endpoint and includes the registry media type. Clients need to account for the field difference. |
+| Federation | `FEDERATION_MODE` configures `none`, `referrals`, or `auto` on the server; the request's `federation` field is ignored. Matching indexed registries can still appear as referrals in any mode. In `auto` mode, added upstream results are not constrained by the request's type filter or page size. |
+| Browse filters and ordering | Only one `type:"value"` or `tags:"value"` term is applied. Unrecognized fields and expressions the parser cannot parse are ignored. Entries are ordered by NANDA organization ID; the `orderBy` parameter is ignored despite the descriptor advertising `identifier` ordering. |
+| Explore | Only `type` and `tags` facets are supported. Counts cover active, unmoderated organization entries. `query.text`, `query.filter`, and facet limits are not applied. |
+| Skill media type | The adapter maps NANDA's `application/agentskill+zip` to `application/ai-skill+md`. ARD v0.91 lists `application/agent-skills+md`. The mapping changes the label without converting the artifact. |
+| Trust evidence | The `/api/ard` adapter omits `trustManifest` from results. Registration and provenance fields do not establish that a resource or its trust evidence has been verified. |
+
+The source includes a separate NANDA API for registration and identifier
+resolution, documented in the [README](https://github.com/projnanda/nanda-index-v2/blob/dadea66595825f5f21aa5d34be5209203a8340f6/README.md)
+and [OpenAPI reference](https://api.nandaindex.org/docs/). Those operations extend
+the index's own API and are not additional ARD requirements.
+
+Implementation details are available in the
+[route handlers](https://github.com/projnanda/nanda-index-v2/blob/dadea66595825f5f21aa5d34be5209203a8340f6/server/src/routes/ard.ts),
+[descriptor and result mappings](https://github.com/projnanda/nanda-index-v2/blob/dadea66595825f5f21aa5d34be5209203a8340f6/server/src/services/ardRegistry.ts),
+and [integration tests](https://github.com/projnanda/nanda-index-v2/blob/dadea66595825f5f21aa5d34be5209203a8340f6/server/tests/integration/ard.test.ts).

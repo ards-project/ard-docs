@@ -32,6 +32,9 @@ Create a static `ard.json` manifest listing your agentic resources. Below is a c
 *   **`identifier`**: Naming must follow the domain-anchored URN standard: `urn:air:<your-domain>:<namespace>:<agent-name>`.
 *   **`representativeQueries`**: Provide **2–5 natural language queries** to enable high-fidelity semantic vector search.
 
+*  **Tip:** Phrase `representativeQueries` in the searcher's vocabulary — the words someone trying to get a task done would actually type — not your internal product terminology. If the queries use jargon only your team knows, the resource won't surface for the people who need it.
+ 
+
 ---
 
 ## Step 2: Host the manifest

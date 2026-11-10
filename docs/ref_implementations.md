@@ -47,27 +47,51 @@ Call search directly at `POST https://agentfinder.github.com/api/v1/search`. The
 ## Cisco AI Catalog
 
 The [AGNTCY Agent Directory](https://dir.agntcy.org) reference implementation of ARD is deployed by the Cisco [AI Catalog](https://ai-catalog.outshift.io).
-The catalog can be pulled from [`ai-catalog.outshift.io/.well-known/ard.json`](https://ai-catalog.outshift.io/.well-known/ard.json).
-It supports secure verification through trust manifests, so clients can validate publisher identity and resource integrity before use.
+The publisher manifest at [`ai-catalog.outshift.io/.well-known/ai-catalog.json`](https://ai-catalog.outshift.io/.well-known/ai-catalog.json) lists four sub-catalogs of type `application/ai-catalog+json` (A2A agents, MCP servers, Agent Skills, and Agent Skill bundles), each resolved through `/v1/catalog`.
+Each entry is signed with a `publisher-identity` attestation as a sigstore bundle and `derivedFrom` provenance, so clients can validate publisher identity and resource integrity before use.
 
 ### 1. Pull the catalog manifest
 
 ```bash
-curl -sS https://ai-catalog.outshift.io/.well-known/ard.json | jq '.entries | length'
+curl -sS https://ai-catalog.outshift.io/.well-known/ai-catalog.json \
+  | jq -r '.entries[] | [.displayName, .url] | @tsv'
 ```
 
-### 2. Discover A2A cards
+### 2. Follow a sub-catalog
+
+MCP servers:
 
 ```bash
-curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fa2a-agent-card%2Bjson' \
-	| jq -r '.results[] | "\(.displayName)\t\(.data.card_data.url // .identifier)"'
+curl -sS 'https://ai-catalog.outshift.io/v1/catalog?filter=type%3Dapplication%2Fmcp-server-card%2Bjson' \
+  | jq -r '.entries[] | "\(.displayName)\t\(.identifier)"'
 ```
 
-### 3. Search by card type and extract trust details
+A2A agents:
 
 ```bash
-curl -sS 'https://ai-catalog.outshift.io/v1/agents?filter=type%3Dapplication%2Fmcp-server-card%2Bjson' \
-	| jq -r '.results[] | {displayName, identity: .trustManifest.identity, identityType: .trustManifest.identityType, cardUrl: .data.card_data.url} | @json'
+curl -sS 'https://ai-catalog.outshift.io/v1/catalog?filter=type%3Dapplication%2Fa2a-agent-card%2Bjson' \
+  | jq -r '.entries[] | "\(.displayName)\t\(.identifier)"'
+```
+
+### 3. Search the index
+
+Pass `query` as a string. `GET /v1/agents` serves the same records for deterministic browse.
+
+```bash
+curl -sS -X POST https://ai-catalog.outshift.io/v1/search \
+  -H 'content-type: application/json' \
+  -d '{"query":"grafana"}' \
+  | jq -r '.results[] | "\(.displayName)\t\(.type)"'
+```
+
+### 4. Inspect trust and provenance
+
+`provenance` is on `trustManifest`.
+
+```bash
+curl -sS 'https://ai-catalog.outshift.io/v1/catalog?filter=type%3Dapplication%2Fmcp-server-card%2Bjson' \
+  | jq '.entries[0].trustManifest
+        | {identity, identityType, attestation: .attestations[0].type, provenance: .provenance[0].relation}'
 ```
 
 ## Ora Directory

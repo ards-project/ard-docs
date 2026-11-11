@@ -270,3 +270,21 @@ git clone https://github.com/ards-project/ard-spec
 pip install jsonschema
 ard-spec/conformance/bin/conformance-test manifest https://api.live.nevermined.app/.well-known/ard.json
 ```
+
+
+## Lifecycle Instrumentation Prototype (Experimental)
+
+The [ARD Lifecycle Instrumentation prototype](https://github.com/91pavan/ard-lifecycle-instrumentation)
+instruments MCP tool discovery and admission policy through Agent Gateway and an
+external policy processor, exporting traces through OpenTelemetry to Jaeger.
+It illustrates a context-propagation boundary relevant to ARD consumers, not an
+end-to-end ARD Registry discovery flow. It is an experimental instrumentation
+example, not a production trust verifier or a demonstration of ARD Registry
+conformance. This description refers to
+[revision `d3dfa34`](https://github.com/91pavan/ard-lifecycle-instrumentation/tree/d3dfa34a2be2d02880886ff18d135b72bd12b92d).
+
+See the [Distributed Tracing guide](observability.md#prototype-agent-gateway-policy-instrumentation)
+for the experimental spans, enforcement checks, and distinction between sharing a
+trace ID and preserving parent/link relationships. The prototype's
+[README](https://github.com/91pavan/ard-lifecycle-instrumentation/blob/d3dfa34a2be2d02880886ff18d135b72bd12b92d/README.md)
+provides setup instructions and reproducible checks.

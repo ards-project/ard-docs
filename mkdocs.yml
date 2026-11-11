@@ -109,6 +109,7 @@ nav:
       - Gemini: connect/gemini.md
     - How to publish: how_to_publish.md
     - How to add ARD support to your agent: how_to_build_a_client.md
+    - Distributed tracing: observability.md
     - Reference Implementations: ref_implementations.md
   - Specifications:
     - ARD Specification: spec.md

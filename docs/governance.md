@@ -28,6 +28,8 @@ Two bodies share the work. The **Oversight Board** decides *what* ARD should bec
 
 **Decisions.** Specification changes are agreed by majority vote of the Maintainers.
 
+**Meetings.** The Maintainers meet every two weeks (every other Wednesday) to review open proposals, resolve technical questions, and coordinate specification work. Join the ARD Discord for further details or if you would like to get involved.
+
 ---
 
 ## How the two relate
